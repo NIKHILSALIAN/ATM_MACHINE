@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services</title>
+    <link rel="stylesheet" href="Services.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="logo"><a href="#">ATM MACHINE</a></div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>PLEASE SELECT SERVICE</h1>
+        <button id="depositButton">Deposit</button>
+        <button id="withdrawButton">Withdraw</button>
+        <button id="checkBalanceButton">Check Balance</button>
+        <button id="logoutButton">Logout</button>
+    </div>
+
+    <!-- Modal for Deposit -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeDepositModal">&times;</span>
+            <h2>Deposit Money</h2>
+            <form id="depositForm">
+                <label for="depositAmount">Enter Amount:</label>
+                <input type="number" id="depositAmount" name="depositAmount" required>
+                <button type="submit">Deposit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Withdraw -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeWithdrawModal">&times;</span>
+            <h2>Withdraw Money</h2>
+            <form id="withdrawForm">
+                <label for="withdrawAmount">Enter Amount:</label>
+                <input type="number" id="withdrawAmount" name="withdrawAmount" required>
+                <button type="submit">Withdraw</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Div -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Add event listeners for the Deposit button and Modal
+        const depositModal = document.getElementById("depositModal");
+        const closeDepositModal = document.getElementById("closeDepositModal");
+        const depositButton = document.getElementById("depositButton");
+
+        // Show the modal when the Deposit button is clicked
+        depositButton.addEventListener("click", function() {
+            depositModal.style.display = "block";
+        });
+
+        // Hide the modal when the close button is clicked
+        closeDepositModal.addEventListener("click", function() {
+            depositModal.style.display = "none";
+        });
+
+        // Hide the modal when clicking outside of the modal
+        window.addEventListener("click", function(event) {
+            if (event.target === depositModal) {
+                depositModal.style.display = "none";
+            }
+        });
+
+        // Handle deposit form submission
+        document.getElementById("depositForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const depositAmount = document.getElementById("depositAmount").value;
+            const accountNumber = localStorage.getItem("accountNumber");
+
+            // Send the deposit request to the backend
+            fetch(`http://localhost:8081/api/atm/deposit?accountNumber=${accountNumber}&amount=${depositAmount}`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text(); // Get the response text from the backend
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .then(result => {
+                showNotification(result); // Display the message from the backend
+                depositModal.style.display = "none"; // Close the modal after deposit
+            })
+            .catch(error => {
+                showNotification("Deposit Failed: " + error.message, false);
+            });
+        });
+
+        // Add event listeners for the Withdraw button and Modal
+        const withdrawModal = document.getElementById("withdrawModal");
+        const closeWithdrawModal = document.getElementById("closeWithdrawModal");
+        const withdrawButton = document.getElementById("withdrawButton");
+
+        // Show the modal when the Withdraw button is clicked
+        withdrawButton.addEventListener("click", function() {
+            withdrawModal.style.display = "block";
+        });
+
+        // Hide the modal when the close button is clicked
+        closeWithdrawModal.addEventListener("click", function() {
+            withdrawModal.style.display = "none";
+        });
+
+        // Hide the modal when clicking outside of the modal
+        window.addEventListener("click", function(event) {
+            if (event.target === withdrawModal) {
+                withdrawModal.style.display = "none";
+            }
+        });
+
+        // Handle withdraw form submission
+        document.getElementById("withdrawForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const withdrawAmount = document.getElementById("withdrawAmount").value;
+            const accountNumber = localStorage.getItem("accountNumber");
+
+            // Send the withdraw request to the backend
+            fetch(`http://localhost:8081/api/atm/withdraw?accountNumber=${accountNumber}&amount=${withdrawAmount}`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text(); // Get the response text from the backend
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .then(result => {
+                showNotification(result); // Display the message from the backend
+                withdrawModal.style.display = "none"; // Close the modal after withdrawal
+            })
+            .catch(error => {
+                showNotification("Withdrawal Failed: " + error.message, false);
+            });
+        });
+
+         // Add event listener for the Check Balance button
+         document.getElementById("checkBalanceButton").addEventListener("click", function() {
+            const accountNumber = localStorage.getItem("accountNumber"); // Retrieve account number from local storage
+            const pin = localStorage.getItem("pin"); // Retrieve pin from local storage
+
+            if (!accountNumber || !pin) {
+                showNotification("You must be logged in to check your balance.", false);
+                return;
+            }
+
+            fetch(`http://localhost:8081/api/atm/checkBalance?accountNumber=${accountNumber}&pin=${pin}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text(); // Assuming your backend returns a string with the balance
+                    } else {
+                        return response.text().then(text => { throw new Error(text); });
+                    }
+                })
+                .then(balanceMessage => {
+                    showNotification(balanceMessage); // Display balance message
+                })
+                .catch(error => {
+                    showNotification("Failed to fetch balance: " + error.message, false); // Show error message
+                });
+        });
+
+        
+
+        // Function to show notification
+        function showNotification(message, isSuccess = true) {
+            const notification = document.getElementById("notification");
+            notification.textContent = message; // Set the notification message
+            notification.style.backgroundColor = isSuccess ? "#2a2438" : "#f44336"; // Change to your desired colors
+            notification.classList.add("show");
+
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove("show");
+            }, 5000);
+        }
+
+  // Add event listener for the Logout button
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            // Clear local storage to log out the user
+            localStorage.removeItem("accountNumber");
+            localStorage.removeItem("pin");
+
+            // Redirect to the login page
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>

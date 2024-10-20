@@ -1,0 +1,175 @@
+* {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #dbd8e3;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #2a2438;
+    padding: 15px;
+}
+
+.navdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo a {
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+}
+
+li a {
+    font-size: 1.25rem;
+    color: white;
+    font-weight: bold;
+    margin-right: 25px;
+}
+
+/* Main section */
+.maindiv {
+    color: #2a2438;
+    font-size: 2rem;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    display: inline-block;
+    width: 40%;
+    height: auto;
+    margin-top: 10%;
+    margin-left: 10%;
+    padding: 20px;
+    float: left;
+    /* Removed border */
+}
+
+/* Login div */
+.logindiv {
+    width: 30%;
+    height: auto;
+    margin-top: 10%;
+    margin-left: 35%;
+    border-radius: 20px;
+    background-color: #2a2438;
+    padding: 20px;
+    border: 1px solid black;
+    float: left;
+}
+
+.logindiv h1 {
+    text-align: center;
+    color: aliceblue;
+    font-weight: bolder;
+    margin-bottom: 30px;
+}
+
+.logindiv h2 {
+    color: aliceblue;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    display: block;
+    width: 80%;
+    padding: 8px;  /* Reduced padding for smaller button */
+    font-size: 1rem; /* Reduced font size */
+    border-radius: 5px;
+    background-color: white;
+    color: #2a2438;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button:hover {
+    color: #2a2438;
+    background-color: #dbd8e3;
+}
+
+/* Media queries */
+@media (max-width: 1024px) {
+    .maindiv, .logindiv {
+        width: 45%;
+        margin-left: 5%;
+        float: none;
+        margin: 5% auto;
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px;
+    }
+
+    .logo a {
+        font-size: 1.75rem;
+    }
+
+    li a {
+        font-size: 1rem;
+        margin-right: 15px;
+    }
+
+    .maindiv, .logindiv {
+        width: 80%;
+        margin: 5% auto;
+        float: none;
+    }
+
+    .logindiv {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo a {
+        font-size: 1.5rem;
+    }
+
+    li a {
+        font-size: 0.875rem;
+        margin-right: 10px;
+    }
+
+    .maindiv, .logindiv {
+        width: 90%;
+        margin: 5% auto;
+        float: none;
+    }
+
+    input {
+        padding: 8px;
+    }
+
+    button {
+        font-size: 0.875rem; /* Even smaller button on mobile */
+        padding: 6px;  /* Smaller padding for mobile */
+    }
+}

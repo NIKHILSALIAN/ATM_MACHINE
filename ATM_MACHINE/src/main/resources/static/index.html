@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>ATM Machine</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="logo"><a href="#"> ATM MACHINE</a></div>
+            <ul>
+                <li><a href="Login.html">Login</a></li>
+                <li><a href="#">home</a></li>
+                <li><a href="#">about </a></li>
+                <li><a href="#">contact </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="maindiv">
+        <h1>Withdraw, Deposit & Transfer Money Safe & Secure way</h1>
+    </div>
+
+    <div class="logindiv">
+        <h1>Create Account</h1>
+        <form id="createAccountForm">
+            <div class="input-group">
+                <div class="input-field">
+                    <h2>Account Number</h2>
+                    <input type="text" id="accountNumber" placeholder="Enter account number" required>
+                </div>
+
+                <div class="input-field">
+                    <h2>Pin</h2>
+                    <input type="password" id="pin" placeholder="Enter PIN" required>
+                </div>
+
+                <button type="submit">Create Account</button>
+            </div>
+        </form>
+    </div>
+
+   
+
+    <script>
+        document.getElementById('createAccountForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const accountNumber = document.getElementById('accountNumber').value;
+            const pin = document.getElementById('pin').value;
+
+            // Create the JSON object to send in the request
+            const accountData = {
+                accountNumber: accountNumber,
+                pin: pin
+            };
+
+            // Send the request to the backend
+            fetch('http://localhost:8081/api/atm/createAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(accountData),
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .then(data => {
+                alert('Account created successfully!');
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                alert('Failed to create account: ' + error.message);
+                console.error('Error:', error);
+            });
+        });
+
+
+        
+        
+    </script>
+</body>
+</html>
