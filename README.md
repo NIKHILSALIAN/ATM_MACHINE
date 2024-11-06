@@ -67,3 +67,8 @@ spring.datasource.url=jdbc:mysql://localhost:3306/atm_db spring.datasource.usern
 ![HOME PAGE](https://github.com/NIKHILSALIAN/ATM_MACHINE/blob/main/ATM_MACHINE/Screenshots/Withdraw%20notification.PNG?raw=true)
  
 
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+[MIT](https://choosealicense.com/licenses/mit/)
+
